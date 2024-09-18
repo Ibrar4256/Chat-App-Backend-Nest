@@ -6,6 +6,5 @@ import { ChatArchiveService } from './chat-archive/chat-archive.service';
 
 @Module({
   imports: [ChatModule, ScheduleModule.forRoot()],
-  providers: [ChatGateway, ChatArchiveService],
 })
 export class AppModule {}

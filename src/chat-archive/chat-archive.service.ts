@@ -23,17 +23,17 @@ export class ChatArchiveService {
         if (!fs.existsSync(archivePath)) {
           fs.mkdirSync(archivePath);
         }
-        const filePath = path.join(archivePath, `chat-archive-${Date.now()}.txt`);
+        const fileName = path.join(archivePath, `chat-archive-${Date.now()}.txt`);
         const data = messages
           .map((msg) => `${msg.user}: ${msg.message}`)
           .join('\n');
-        fs.writeFileSync(filePath, data);
-        console.log('Messages archived:', filePath);
+        fs.writeFileSync(fileName, data);
+        console.log('Messages archived:', fileName);
       } catch (error) {
         console.error('Error archiving messages:', error);
       }
 
-      this.chatGateway.clearMessages(); // Clear after archiving
+    //   this.chatGateway.clearMessages(); // Clear after archiving
     }
   }
 }
