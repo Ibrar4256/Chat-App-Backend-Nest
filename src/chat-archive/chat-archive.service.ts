@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
 import { ChatGateway } from '../chat/chat.gateway';
 import * as fs from 'fs';
@@ -14,8 +14,6 @@ export class ChatArchiveService {
     if (messages.length) {
       const archivePath = path.join(__dirname, '../archives');
       
-      console.log('Archive path:', archivePath);
-      
       try {
         if (!fs.existsSync(archivePath)) {
           fs.mkdirSync(archivePath);
@@ -25,9 +23,8 @@ export class ChatArchiveService {
           .map((msg) => `${msg.user}: ${msg.message}`)
           .join('\n');
         fs.writeFileSync(filePath, data);
-        console.log('Messages archived:', filePath);
       } catch (error) {
-        console.error('Error archiving messages:', error);
+        throw new InternalServerErrorException('Error Archiving Messages: ', error);
       }
     }
   }

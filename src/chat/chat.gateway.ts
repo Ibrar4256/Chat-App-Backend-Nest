@@ -10,11 +10,11 @@ import { Socket, Server } from 'socket.io';
 
 @WebSocketGateway(3002, { cors: '*' })
 export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
-  @WebSocketServer() //performs io.emit() functionality
+  @WebSocketServer()
   server: Server;
 
   private messages: { user: string; message: string }[] = [];
-  private users: Map<string, string> = new Map(); // Map to store client.id to username
+  private users: Map<string, string> = new Map();
 
   handleConnection(client: Socket) {
     console.log(`Client connected: ${client.id}`);
@@ -28,7 +28,6 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     this.users.delete(client.id);
   }
 
-  // Handle setting a username when a user joins
   @SubscribeMessage('setUsername')
   handleSetUsername(client: Socket, username: string) {
     this.users.set(client.id, username);
@@ -37,12 +36,8 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     });
   }
 
-  // Handle sending a message
   @SubscribeMessage('sendMessage')
-  handleMessage(
-    client: Socket,
-    payload: { message: string },
-  ): void {
+  handleMessage(client: Socket, payload: { message: string }): void {
     const username = this.users.get(client.id) || 'Anonymous';
     const newMessage = { user: username, message: payload.message };
     this.messages.push(newMessage);
@@ -57,14 +52,3 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     this.messages = [];
   }
 }
-
-
-
-//socket.on()
-
-//io.emit()  broadcast/send message to all connected clients
-
-//socket.emit() send message to 1 single client
-
-//client.broadcast.emit()  broadcasts the message to eveyone except the user itself
-// }
