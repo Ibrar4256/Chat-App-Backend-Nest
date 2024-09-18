@@ -10,19 +10,16 @@ import { Socket, Server } from 'socket.io';
 
 @WebSocketGateway(3002, { cors: '*' })
 export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
-  @WebSocketServer() //io.emit()
+  @WebSocketServer() //performs io.emit() functionality
   server: Server;
 
-  // Store user and message information
   private messages: { user: string; message: string }[] = [];
   private users: Map<string, string> = new Map(); // Map to store client.id to username
 
-  // When a new user connects
   handleConnection(client: Socket) {
     console.log(`Client connected: ${client.id}`);
   }
 
-  // When a user disconnects
   handleDisconnect(client: Socket) {
     const username = this.users.get(client.id) || 'Unknown User';
     this.server.emit('user-left', {
@@ -52,23 +49,16 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     this.server.emit('receiveMessage', newMessage);
   }
 
-  // Retrieve messages (if needed)
   getMessages() {
     return this.messages;
   }
 
-  // Clear messages (optional for future use)
   clearMessages() {
     this.messages = [];
   }
 }
 
-// @SubscribeMessage('newmessage')
-// handleNewMessage(@MessageBody() message: string) {
-//   // console.log(message);
 
-//   this.server.emit('message', message); //io.emit()
-// }
 
 //socket.on()
 

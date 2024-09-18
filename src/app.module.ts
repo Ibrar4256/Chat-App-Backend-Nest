@@ -1,10 +1,8 @@
 import { Module } from '@nestjs/common';
 import { ScheduleModule } from '@nestjs/schedule';
-import { ChatGateway } from './chat/chat.gateway';
-import { ChatModule } from './chat/chat.module';
-import { ChatArchiveService } from './chat-archive/chat-archive.service';
+import { ChatArchiveModule } from './chat-archive/chat-archive.module';
 
 @Module({
-  imports: [ChatModule, ScheduleModule.forRoot()],
+  imports: [ChatArchiveModule, ScheduleModule.forRoot()],
 })
 export class AppModule {}
